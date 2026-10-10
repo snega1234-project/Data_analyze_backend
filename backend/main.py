@@ -1,8 +1,12 @@
 import os
+import sys
 import shutil
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+
+# Ensure the backend directory is in the system path so it can find analytics.py universally
+sys.path.append(os.path.dirname(__file__))
 from analytics import DataAnalyzer
 
 app = FastAPI(title="Data Analytics API")
