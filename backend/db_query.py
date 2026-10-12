@@ -69,7 +69,13 @@ Question:
                 df = df.drop(columns=["_id"])
                 
         else:
-            engine = create_engine(connection_string)
+            conn_str = connection_string.strip()
+            if db_type.lower() == "mysql" and conn_str.startswith("mysql://"):
+                conn_str = "mysql+pymysql://" + conn_str[len("mysql://"):]
+            elif db_type.lower() in ["postgresql", "postgres"] and (conn_str.startswith("postgresql://") or conn_str.startswith("postgres://")):
+                prefix = "postgresql://" if conn_str.startswith("postgresql://") else "postgres://"
+                conn_str = "postgresql+psycopg2://" + conn_str[len(prefix):]
+            engine = create_engine(conn_str)
             
             # 1. Extract schema information
             schema_info = []
@@ -117,8 +123,7 @@ Question:
         csv_data = df.to_csv(index=False)
         
         # 5. Convert to Excel Base64
-        import io
-        import base64
+        import io, base64
         excel_buf = io.BytesIO()
         with pd.ExcelWriter(excel_buf, engine='openpyxl') as writer:
             df.to_excel(writer, index=False)
