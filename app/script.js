@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dbResult = document.getElementById('db-result');
     const downloadCsvBtn = document.getElementById('download-csv-btn');
     const downloadExcelBtn = document.getElementById('download-excel-btn');
+    const dbNewQueryBtn = document.getElementById('db-new-query-btn');
     const dbCancelBtn = document.getElementById('db-cancel-btn');
 
     let currentFileName = '';
@@ -328,14 +329,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    dbCancelBtn.addEventListener('click', () => {
-        currentDbResultData = null;
-        currentDbExcelData = null;
-        dbResult.style.display = 'none';
-        dbForm.style.display = 'block';
-        dbForm.reset();
-        dbForm.querySelector('button[type="submit"]').style.display = 'block';
-    });
+    if (dbNewQueryBtn) {
+        dbNewQueryBtn.addEventListener('click', () => {
+            currentDbResultData = null;
+            currentDbExcelData = null;
+            dbResult.style.display = 'none';
+            dbForm.style.display = 'block';
+            
+            // Clear only the query prompt, keeping DB type, connection string, and API key intact
+            const aiQuery = document.getElementById('ai-query');
+            if (aiQuery) {
+                aiQuery.value = '';
+                aiQuery.focus();
+            }
+            
+            dbForm.querySelector('button[type="submit"]').style.display = 'block';
+        });
+    }
+
+    if (dbCancelBtn) {
+        dbCancelBtn.addEventListener('click', () => {
+            currentDbResultData = null;
+            currentDbExcelData = null;
+            dbResult.style.display = 'none';
+            dbForm.style.display = 'block';
+            dbForm.reset();
+            
+            // Also reset connection test button state if changed
+            const testBtn = document.getElementById('test-connection-btn');
+            if (testBtn) {
+                testBtn.textContent = 'Test';
+                testBtn.style.background = '';
+                testBtn.style.color = '';
+                testBtn.disabled = false;
+            }
+            
+            dbForm.querySelector('button[type="submit"]').style.display = 'block';
+        });
+    }
 
     // Custom Toast Logic
     function showToast(message, type = 'error') {
