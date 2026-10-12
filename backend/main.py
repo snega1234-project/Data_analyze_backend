@@ -50,8 +50,14 @@ async def test_connection(req: TestConnectionRequest):
         elif req.db_type.lower() == "sqlite" or req.connection_string.strip().lower().startswith("sqlite"):
             return {"status": "error", "message": "SQLite is a local database and cannot be tested here."}
         else:
+            conn_str = req.connection_string.strip()
+            if req.db_type.lower() == "mysql" and conn_str.startswith("mysql://"):
+                conn_str = "mysql+pymysql://" + conn_str[len("mysql://"):]
+            elif req.db_type.lower() in ["postgresql", "postgres"] and (conn_str.startswith("postgresql://") or conn_str.startswith("postgres://")):
+                prefix = "postgresql://" if conn_str.startswith("postgresql://") else "postgres://"
+                conn_str = "postgresql+psycopg2://" + conn_str[len(prefix):]
             from sqlalchemy import create_engine
-            engine = create_engine(req.connection_string)
+            engine = create_engine(conn_str)
             with engine.connect() as conn:
                 pass
         return {"status": "success", "message": "Connection successful!"}
