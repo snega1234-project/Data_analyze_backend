@@ -133,11 +133,14 @@
                 </form>
                 <div id="db-result" style="display: none; margin-top: 1.5rem; text-align: center;">
                     <p style="margin-bottom: 1rem; color: #10b981; font-weight: 600;">Query executed successfully!</p>
-                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem;">
                         <button id="download-csv-btn" class="btn" style="background: #10b981; color: white; flex: 1;">Download CSV</button>
                         <button id="download-excel-btn" class="btn" style="background: #10b981; color: white; flex: 1;">Download Excel</button>
                     </div>
-                    <button id="db-cancel-btn" class="btn mt-1 action-btn" style="width: auto; margin-top: 1rem;">Cancel / New Query</button>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button type="button" id="db-new-query-btn" class="btn primary-btn" style="flex: 1;">New Query</button>
+                        <button type="button" id="db-cancel-btn" class="btn action-btn" style="flex: 1;">Cancel</button>
+                    </div>
                 </div>
             </section>
         </main>
@@ -153,7 +156,7 @@
     </div>
     <div id="toast-container" class="toast-container"></div>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
 </body>
 
 </html>
